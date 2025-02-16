@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.http import Http404
-
+from blog.models import Post
 
 def index(request):
-    return render(request, 'blog/index.html', {'posts': posts})
+    post_list = Post.objects.values('id', 'title', 'description')
+    return render(request, 'blog/index.html', {'post_list': post_list})
 
 
 def post_detail(request, id):
