@@ -67,7 +67,6 @@ class Location(PublishedModel):
         verbose_name = 'местоположение'
         verbose_name_plural = 'Местоположения'
 
-    def __str__(self):
-        return self.title
+
 
 # User (Пользователь, эту модель описывать не нужно, она встроена в Django)
