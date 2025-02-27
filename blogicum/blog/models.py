@@ -11,8 +11,7 @@ class Post(PublishedModel):
     text = models.TextField(verbose_name='Текст')
     pub_date = models.DateTimeField(
         verbose_name='Дата и время публикации',
-        help_text='Если установить дату и время в будущем —'
-        'можно делать отложенные публикации.')
+        help_text='Если установить дату и время в будущем — можно делать отложенные публикации.')
     author = models.ForeignKey(
         User,
         blank=False,
@@ -44,10 +43,11 @@ class Post(PublishedModel):
 
 # Category (Тематическая категория)
 class Category(PublishedModel):
-    title = models.CharField(max_length=256)
-    description = models.TextField()
+    title = models.CharField(max_length=256, verbose_name='Заголовок')
+    description = models.TextField(verbose_name='Описание')
     slug = models.SlugField(
         unique=True,
+        verbose_name='Идентификатор',
         help_text='Идентификатор страницы для URL;'
         ' разрешены символы латиницы, цифры, дефис и подчёркивание.')
 
@@ -66,7 +66,3 @@ class Location(PublishedModel):
     class Meta:
         verbose_name = 'местоположение'
         verbose_name_plural = 'Местоположения'
-
-
-
-# User (Пользователь, эту модель описывать не нужно, она встроена в Django)
