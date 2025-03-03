@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
-from blog.models import Post, Category, Location
+from blog.models import Post, Category
 from datetime import date
 
 
@@ -8,25 +8,30 @@ from datetime import date
 def index(request):
     post_list = Post.objects.filter(
         is_published=True,
-        created_at__lt=date.today(),
-        category__is_published=True).order_by('id')[:5]
+        pub_date__lt=date.today(),
+        category__is_published=True).order_by('-pub_date')[:5]
     return render(request, 'blog/index.html', {'post_list': post_list})
 
 
 # Страница отдельной публикации
 def post_detail(request, id):
-    post = get_object_or_404(Post.objects.filter(
-        is_published=True, created_at__lt=date.today()), id=id)
+    post = get_object_or_404(Post.objects.exclude(
+                             Q(is_published=False)
+                             | Q(pub_date__gt=date.today())
+                             | Q(category__is_published=False)),
+                             id=id)
     return render(request, 'blog/detail.html', {'post': post})
 
 
 # Страница категории
 def category_posts(request, category_slug):
-   # category_list = get_object_or_404(Post.objects.filter(category__is_published=False))
-    category_list = Post.objects.select_related('category').filter(
+    category = get_object_or_404(Category.objects.filter(
+        is_published=True), slug=category_slug)
+    post_list = Post.objects.filter(
         is_published=True,
-        created_at__lt=date.today(),
-        category__slug=category_slug)
+        pub_date__lt=date.today(),
+        category=category)
     return render(request,
                   'blog/category.html',
-                  {'category_posts': category_list})
+                  {'category': category,
+                   'post_list': post_list})
