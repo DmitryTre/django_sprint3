@@ -35,7 +35,7 @@ class Post(IsPublishedAndCreatedAt):
     )
 
     class Meta:
-        pub_date = 
+        ordering = ('-pub_date')
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
         related_name = 'post'
@@ -69,6 +69,6 @@ class Location(IsPublishedAndCreatedAt):
     class Meta:
         verbose_name = 'местоположение'
         verbose_name_plural = 'Местоположения'
-    
+
     def __str__(self):
         return self.title[:20]

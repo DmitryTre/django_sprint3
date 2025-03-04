@@ -5,6 +5,11 @@ from django.utils import timezone
 
 now = timezone.now()
 
+
+# Функция фильтрации постов
+def post_manager():
+    
+
 # Главная страница проекта
 def index(request):
     post_list = Post.objects.filter(
