@@ -4,12 +4,14 @@ from django.contrib.auth import get_user_model
 
 from core.models import IsPublishedAndCreatedAt
 
+from .constants import length
+
 User = get_user_model()
 
 
 # Post (Публикация)
 class Post(IsPublishedAndCreatedAt):
-    title = models.CharField(max_length=256, verbose_name='Заголовок')
+    title = models.CharField(max_length=length, verbose_name='Заголовок')
     text = models.TextField(verbose_name='Текст')
     pub_date = models.DateTimeField(
         verbose_name='Дата и время публикации',
@@ -23,6 +25,7 @@ class Post(IsPublishedAndCreatedAt):
     )
     location = models.ForeignKey(
         'Location',
+        blank=True,
         null=True,
         on_delete=models.SET_NULL,
         verbose_name='Местоположение'
@@ -35,10 +38,10 @@ class Post(IsPublishedAndCreatedAt):
     )
 
     class Meta:
-        ordering = ('-pub_date')
+        ordering = ('-pub_date',)
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
-        related_name = 'post'
+        default_related_name = 'post'
 
     def __str__(self):
         return self.title[:20]
@@ -46,7 +49,7 @@ class Post(IsPublishedAndCreatedAt):
 
 # Category (Тематическая категория)
 class Category(IsPublishedAndCreatedAt):
-    title = models.CharField(max_length=256, verbose_name='Заголовок')
+    title = models.CharField(max_length=length, verbose_name='Заголовок')
     description = models.TextField(verbose_name='Описание')
     slug = models.SlugField(
         unique=True,
@@ -64,7 +67,7 @@ class Category(IsPublishedAndCreatedAt):
 
 # Location (Географическая метка)
 class Location(IsPublishedAndCreatedAt):
-    name = models.CharField(max_length=256, verbose_name='Название места')
+    name = models.CharField(max_length=length, verbose_name='Название места')
 
     class Meta:
         verbose_name = 'местоположение'
