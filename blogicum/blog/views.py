@@ -1,7 +1,9 @@
 from django.shortcuts import get_object_or_404, render
-from django.db.models import Q
-from blog.models import Category, Post
+
 from django.utils import timezone
+
+from blog.models import Category, Post
+
 from .constants import homepage_posts
 
 now = timezone.now()
