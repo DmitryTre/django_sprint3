@@ -1,2 +1,3 @@
-length = 256
-homepage_posts = 5
+MAX_TEXT_LENGHT = int(256)
+HOMEPAGE_POSTS = int(5)
+INTRODUCTORY_TEXT = int(20)

@@ -1,22 +1,19 @@
 from django.shortcuts import get_object_or_404, render
-
 from django.utils import timezone
 
 from blog.models import Category, Post
+from .constants import HOMEPAGE_POSTS
 
-from .constants import homepage_posts
-
-now = timezone.now()
+post_list = Post.objects.filter(
+    is_published=True,
+    pub_date__lt=timezone.now(),
+    category__is_published=True
+)
 
 
 # Функция фильтрации постов
-def post_manager():
-    post_manager = Post.objects.filter(
-        is_published=True,
-        pub_date__lt=now,
-        category__is_published=True
-    )
-    return post_manager.select_related(
+def selector(post_list):
+    return post_list.select_related(
         'location',
         'category',
         'author'
@@ -25,23 +22,22 @@ def post_manager():
 
 # Главная страница проекта
 def index(request):
-    post_list = post_manager().order_by('-pub_date')[:homepage_posts]
-    return render(request, 'blog/index.html', {'post_list': post_list})
+    # post_list = selector(post_list)[:HOMEPAGE_POSTS]
+    return render(request, 'blog/index.html',
+                  {'post_list': selector(post_list)[:HOMEPAGE_POSTS]})
 
 
 # Страница отдельной публикации
 def post_detail(request, post_id):
-    post = get_object_or_404(post_manager(),
+    post = get_object_or_404(selector(post_list),
                              id=post_id)
     return render(request, 'blog/detail.html', {'post': post})
 
 
 # Страница категории
 def category_posts(request, category_slug):
-    category = get_object_or_404(Category.objects.filter(
-        is_published=True), slug=category_slug)
-    post_list = post_manager().filter(category=category)
+    category = get_object_or_404(Category, slug=category_slug)
     return render(request,
                   'blog/category.html',
                   {'category': category,
-                   'post_list': post_list})
+                   'post_list': selector(post_list).filter(category=category)})

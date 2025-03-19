@@ -1,17 +1,18 @@
 from django.db import models
-
 from django.contrib.auth import get_user_model
 
 from core.models import IsPublishedAndCreatedAt
-
-from .constants import length
+from .constants import INTRODUCTORY_TEXT, MAX_TEXT_LENGHT
 
 User = get_user_model()
 
 
 # Post (Публикация)
 class Post(IsPublishedAndCreatedAt):
-    title = models.CharField(max_length=length, verbose_name='Заголовок')
+    title = models.CharField(
+        max_length=MAX_TEXT_LENGHT,
+        verbose_name='Заголовок'
+    )
     text = models.TextField(verbose_name='Текст')
     pub_date = models.DateTimeField(
         verbose_name='Дата и время публикации',
@@ -41,37 +42,40 @@ class Post(IsPublishedAndCreatedAt):
         ordering = ('-pub_date',)
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
-        default_related_name = 'post'
+        default_related_name = 'posts'
 
     def __str__(self):
-        return self.title[:20]
+        return self.title[:INTRODUCTORY_TEXT]
 
 
 # Category (Тематическая категория)
 class Category(IsPublishedAndCreatedAt):
-    title = models.CharField(max_length=length, verbose_name='Заголовок')
+    title = models.CharField(max_length=MAX_TEXT_LENGHT,
+                             verbose_name='Заголовок')
     description = models.TextField(verbose_name='Описание')
     slug = models.SlugField(
         unique=True,
         verbose_name='Идентификатор',
         help_text='Идентификатор страницы для URL;'
-        ' разрешены символы латиницы, цифры, дефис и подчёркивание.')
+        ' разрешены символы латиницы, цифры, дефис и подчёркивание.'
+    )
 
     class Meta:
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
 
     def __str__(self):
-        return self.title[:20]
+        return self.title[:INTRODUCTORY_TEXT]
 
 
 # Location (Географическая метка)
 class Location(IsPublishedAndCreatedAt):
-    name = models.CharField(max_length=length, verbose_name='Название места')
+    name = models.CharField(max_length=MAX_TEXT_LENGHT,
+                            verbose_name='Название места')
 
     class Meta:
         verbose_name = 'местоположение'
         verbose_name_plural = 'Местоположения'
 
     def __str__(self):
-        return self.title[:20]
+        return self.title[:INTRODUCTORY_TEXT]
