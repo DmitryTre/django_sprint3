@@ -40,5 +40,5 @@ def category_posts(request, category_slug):
     return render(request,
                   'blog/category.html',
                   {'category': category,
-                   'post_list': category.posts.all()}
+                   'post_list': selector(post_list).filter(category=category)}
                   )
