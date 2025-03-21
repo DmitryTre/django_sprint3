@@ -22,7 +22,6 @@ def selector(post_list):
 
 # Главная страница проекта
 def index(request):
-    # post_list = selector(post_list)[:HOMEPAGE_POSTS]
     return render(request, 'blog/index.html',
                   {'post_list': selector(post_list)[:HOMEPAGE_POSTS]})
 
@@ -36,8 +35,10 @@ def post_detail(request, post_id):
 
 # Страница категории
 def category_posts(request, category_slug):
-    category = get_object_or_404(Category, slug=category_slug)
+    category = get_object_or_404(Category, slug=category_slug,
+                                 is_published=True)
     return render(request,
                   'blog/category.html',
                   {'category': category,
-                   'post_list': selector(post_list).filter(category=category)})
+                   'post_list': category.posts.all()}
+                  )

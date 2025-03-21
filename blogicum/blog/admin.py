@@ -8,7 +8,6 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('created_at',)
     search_fields = ('title', 'body',)
     list_display_links = ('pk',)
-    empty_value_display = "-пусто-"
 
     @admin.display(description='Кол-во постов у пользователя')
     def posts_count(self, obj):
@@ -20,7 +19,6 @@ class CategoryAdmin(admin.ModelAdmin):
     list_filter = ('created_at',)
     search_fields = ('title', 'slug',)
     list_display_links = ('slug',)
-    empty_value_display = "-пусто-"
 
 
 class LocationAdmin(admin.ModelAdmin):
@@ -29,6 +27,7 @@ class LocationAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
+admin.site.empty_value_display = "-пусто-"
 admin.site.register(Location, LocationAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category, CategoryAdmin)

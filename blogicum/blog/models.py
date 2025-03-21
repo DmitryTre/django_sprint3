@@ -35,7 +35,7 @@ class Post(IsPublishedAndCreatedAt):
         'Category',
         null=True,
         on_delete=models.SET_NULL,
-        verbose_name='Категория'
+        verbose_name='Категория',
     )
 
     class Meta:
