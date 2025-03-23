@@ -36,9 +36,7 @@ def category_posts(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug,
                                  is_published=True)
     category_posts = category.cat_post
-    return render(
-        request,
-        'blog/category.html',
-        {'category': category,
-         'post_list': filter_posts(category_posts)}
-         )
+    return render(request,
+                  'blog/category.html',
+                  {'category': category,
+                   'post_list': filter_posts(category_posts)})
