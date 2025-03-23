@@ -4,16 +4,14 @@ from django.utils import timezone
 from blog.models import Category, Post
 from .constants import HOMEPAGE_POSTS
 
-post_list = Post.objects.filter(
-    is_published=True,
-    pub_date__lt=timezone.now(),
-    category__is_published=True
-)
-
 
 # Функция фильтрации постов
-def selector(post_list):
-    return post_list.select_related(
+def filter_posts(post_list=Post.objects):
+    return post_list.filter(
+        is_published=True,
+        pub_date__lt=timezone.now(),
+        category__is_published=True
+    ).select_related(
         'location',
         'category',
         'author'
@@ -23,12 +21,12 @@ def selector(post_list):
 # Главная страница проекта
 def index(request):
     return render(request, 'blog/index.html',
-                  {'post_list': selector(post_list)[:HOMEPAGE_POSTS]})
+                  {'post_list': filter_posts()[:HOMEPAGE_POSTS]})
 
 
 # Страница отдельной публикации
 def post_detail(request, post_id):
-    post = get_object_or_404(selector(post_list),
+    post = get_object_or_404(filter_posts(),
                              id=post_id)
     return render(request, 'blog/detail.html', {'post': post})
 
@@ -37,8 +35,10 @@ def post_detail(request, post_id):
 def category_posts(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug,
                                  is_published=True)
-    return render(request,
-                  'blog/category.html',
-                  {'category': category,
-                   'post_list': selector(post_list).filter(category=category)}
-                  )
+    category_posts = category.cat_post
+    return render(
+        request,
+        'blog/category.html',
+        {'category': category,
+         'post_list': filter_posts(category_posts)}
+         )

@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from core.models import IsPublishedAndCreatedAt
-from .constants import INTRODUCTORY_TEXT, MAX_TEXT_LENGHT
+from .constants import INTRODUCTORY_TEXT, MAX_LENGHT
 
 User = get_user_model()
 
@@ -10,7 +10,7 @@ User = get_user_model()
 # Post (Публикация)
 class Post(IsPublishedAndCreatedAt):
     title = models.CharField(
-        max_length=MAX_TEXT_LENGHT,
+        max_length=MAX_LENGHT,
         verbose_name='Заголовок'
     )
     text = models.TextField(verbose_name='Текст')
@@ -36,6 +36,7 @@ class Post(IsPublishedAndCreatedAt):
         null=True,
         on_delete=models.SET_NULL,
         verbose_name='Категория',
+        related_name='cat_post'
     )
 
     class Meta:
@@ -50,7 +51,7 @@ class Post(IsPublishedAndCreatedAt):
 
 # Category (Тематическая категория)
 class Category(IsPublishedAndCreatedAt):
-    title = models.CharField(max_length=MAX_TEXT_LENGHT,
+    title = models.CharField(max_length=MAX_LENGHT,
                              verbose_name='Заголовок')
     description = models.TextField(verbose_name='Описание')
     slug = models.SlugField(
@@ -70,7 +71,7 @@ class Category(IsPublishedAndCreatedAt):
 
 # Location (Географическая метка)
 class Location(IsPublishedAndCreatedAt):
-    name = models.CharField(max_length=MAX_TEXT_LENGHT,
+    name = models.CharField(max_length=MAX_LENGHT,
                             verbose_name='Название места')
 
     class Meta:
