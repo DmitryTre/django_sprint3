@@ -5,8 +5,8 @@ from blog.models import Category, Post
 from .constants import HOMEPAGE_POSTS
 
 
-# Функция фильтрации постов
-def filter_posts(post_list=Post.objects):
+# Функция фильтрации постов по публикации
+def filtering_posts_by_publication(post_list=Post.objects):
     return post_list.filter(
         is_published=True,
         pub_date__lt=timezone.now(),
@@ -21,12 +21,13 @@ def filter_posts(post_list=Post.objects):
 # Главная страница проекта
 def index(request):
     return render(request, 'blog/index.html',
-                  {'post_list': filter_posts()[:HOMEPAGE_POSTS]})
+                  {'post_list':
+                   filtering_posts_by_publication()[:HOMEPAGE_POSTS]})
 
 
 # Страница отдельной публикации
 def post_detail(request, post_id):
-    post = get_object_or_404(filter_posts(),
+    post = get_object_or_404(filtering_posts_by_publication(),
                              id=post_id)
     return render(request, 'blog/detail.html', {'post': post})
 
@@ -35,8 +36,8 @@ def post_detail(request, post_id):
 def category_posts(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug,
                                  is_published=True)
-    category_posts = category.cat_post
     return render(request,
                   'blog/category.html',
                   {'category': category,
-                   'post_list': filter_posts(category_posts)})
+                   'post_list':
+                   filtering_posts_by_publication(category.posts)})
