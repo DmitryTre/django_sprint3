@@ -11,7 +11,7 @@ admin.site.unregister(Group)
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    list_display = ('posts_count',)
+    list_display = BaseUserAdmin.list_display + ('posts_count',)
 
     @admin.display(description='Кол-во постов у пользователя')
     def posts_count(self, obj):

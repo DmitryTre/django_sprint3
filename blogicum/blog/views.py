@@ -20,9 +20,13 @@ def filtering_posts_by_publication(post_list=Post.objects):
 
 # Главная страница проекта
 def index(request):
-    return render(request, 'blog/index.html',
-                  {'post_list':
-                   filtering_posts_by_publication()[:HOMEPAGE_POSTS]})
+    return render(
+        request,
+        'blog/index.html',
+        {
+            'post_list': filtering_posts_by_publication()[:HOMEPAGE_POSTS]
+        }
+    )
 
 
 # Страница отдельной публикации
